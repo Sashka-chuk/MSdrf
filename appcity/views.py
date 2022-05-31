@@ -67,8 +67,16 @@ class ShopView(generics.ListAPIView):
 
 class ShopCreateView(generics.CreateAPIView):
     serializer_class = ShopSerializers
-    if serializer_class.is_valid():
-        serializer_class.save()
+
+    def validate(self, data):
+        errors = {}
+        required_fields = ['name', 'city', 'street', 'number_home_shop', 'opening_time', 'closing_time']
+        for field in required_fields:
+            if field not in data:
+                errors[field] = 'This field is required.'
+
+        if errors:
+            raise serializers.ValidationError(errors)
 
     def handle_exception(self, exc):
         return Response({'Data': 'Bad'}, status=400)
