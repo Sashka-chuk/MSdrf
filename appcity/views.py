@@ -76,7 +76,7 @@ class ShopCreateView(generics.CreateAPIView):
                 errors[field] = 'This field is required.'
 
         if errors:
-            raise serializers.ValidationError(errors)
+            return serializers.ValidationError(errors)
 
     def handle_exception(self, exc):
         return Response({'Data': 'Bad'}, status=400)
